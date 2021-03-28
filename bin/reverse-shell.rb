@@ -81,3 +81,27 @@ PAYLOAD_BC_DICT = {
 	"java_class_gzip_b64"=>{"payload"=>"java_class", "gzip_b64"=>true}
 }
 
+option_parser = OptionParser.new do |options|
+	options.banner = "\nUsage:\t#{EXECUTABLE_NAME} [OPTIONS] <PAYLOAD TYPE> <ATTACKER HOST> <ATTACKER PORT>\n"
+	options.banner << "Note:\t<ATTACKER HOST> may be an IPv4 address, IPv6 address or hostname.\n\n"
+	options.banner << "Example:\tlazypariah -u python_b64 10.10.14.4 1555\n"
+	options.banner << "Example:\tlazypariah python_c malicious.local 1337\n\n"
+	options.banner << "Valid Payloads:\n"
+	PAYLOAD_LIST.each do |p|
+		options.banner << "#{" "*4}#{p}\n"
+	end
+	options.banner << "\nValid Options:\n"
+	options.on("-h", "--help", "Display help text and exit.")
+	options.on("-l", "--license", "Display license information and exit.")
+	options.on("-u", "--url", "URL-encode the payload.")
+	options.on("-v", "--version", "Display version information and exit.")
+	options.on("-D INTEGER", "--fd INTEGER", "Specify the file descriptor used by the target for TCP. Required for certain payloads.")
+	options.on("-P INTEGER", "--pv INTEGER", "Specify Python version for payload. Must be either 2 or 3. By default, no version is specified.")
+	options.on("-N", "--no-new-line", TrueClass, "Do not append a new-line character to the end of the payload.")
+	options.on("--b64", "Encode a c_binary, rust_binary or java_class payload in base-64.")
+	options.on("--hex", "Encode a c_binary, rust_binary or java_class payload in hexadecimal.")
+	options.on("--gzip", "Compress a c_binary, rust_binary or java_class payload using zlib.")
+	options.on("--gzip_b64", "Compress a c_binary, rust_binary or java_class payload using zlib and encode the result in base-64.")
+	options.on("--gzip_hex", "Compress a c_binary, rust_binary or java_class payload using zlib and encode the result in hexadecimal.\n\n")
+end
+
