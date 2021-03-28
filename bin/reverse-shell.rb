@@ -1,16 +1,15 @@
-#!/usr/bin/env ruby
-
 require "base64"
 require "optparse"
 require "erb"
 require "zlib"
 require "stringio"
 
-PROGRAM_NAME = "REVERSE-SHELL".freeze()
+# Define constants.
+PROGRAM_NAME = "REVERSESHELL".freeze()
 PROGRAM_VERSION = "1.4.0".freeze()
-EXECUTABLE_NAME = "reverse-shell.rb".freeze()
+EXECUTABLE_NAME = "reverse-shell".freeze()
 
-#define payload list.
+# Define payload list.
 PAYLOAD_LIST = [
 	"python",
 	"python_c",
@@ -81,6 +80,7 @@ PAYLOAD_BC_DICT = {
 	"java_class_gzip_b64"=>{"payload"=>"java_class", "gzip_b64"=>true}
 }
 
+# Initialise command line argument parser.
 option_parser = OptionParser.new do |options|
 	options.banner = "\nUsage:\t#{EXECUTABLE_NAME} [OPTIONS] <PAYLOAD TYPE> <ATTACKER HOST> <ATTACKER PORT>\n"
 	options.banner << "Note:\t<ATTACKER HOST> may be an IPv4 address, IPv6 address or hostname.\n\n"
@@ -105,22 +105,23 @@ option_parser = OptionParser.new do |options|
 	options.on("--gzip_hex", "Compress a c_binary, rust_binary or java_class payload using zlib and encode the result in hexadecimal.\n\n")
 end
 
+# Define port_check method for strings.
 class String
-    def port_check()
-        (self.to_i.to_s == self) and (self.to_i >= 0 and self.to_i <= 65535)
-    end
+	def port_check()
+		(self.to_i.to_s == self) and (self.to_i >= 0 and self.to_i <= 65535)
+	end
 end
 
-#define print_output
+# Define print_output.
 def print_output(s: "", url_encode: false, new_line: true)
-    if url_encode
-        print(ERB::Util.end_encode(s))
-    else
-        print(s)
-    end
-    if new_line
-        puts("\n")
-    end
+	if url_encode
+		print(ERB::Util.url_encode(s))
+	else
+		print(s)
+	end
+	if new_line
+		puts("\n")
+	end
 end
 
 # Attempt to parse command line arguments.
