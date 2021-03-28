@@ -105,3 +105,20 @@ option_parser = OptionParser.new do |options|
 	options.on("--gzip_hex", "Compress a c_binary, rust_binary or java_class payload using zlib and encode the result in hexadecimal.\n\n")
 end
 
+class String
+    def port_check()
+        (self.to_i.to_s == self) and (self.to_i >= 0 and self.to_i <= 65535)
+    end
+end
+
+#define print_output
+def print_output(s: "", url_encode: false, new_line: true)
+    if url_encode
+        print(ERB::Util.end_encode(s))
+    else
+        print(s)
+    end
+    if new_line
+        puts("\n")
+    end
+end
